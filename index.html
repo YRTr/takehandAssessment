@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siemens Technical Assessment Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        siemens: { DEFAULT: '#009999', dark: '#007a7a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { transition: background-color 0.3s, color 0.3s; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .glass-panel { backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 glass-panel sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-siemens rounded flex items-center justify-center text-white font-bold text-xl">S</div>
+                <span class="font-semibold text-xl tracking-tight">Take hand assessment</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm font-mono bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded">Session: Secure</span>
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                    <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center p-6">
+        <div class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="h-2 w-full bg-siemens"></div>
+            <div class="p-10 text-center">
+                <h1 id="statusHeading" class="text-3xl font-bold mb-2">Upcoming Technical Assessment</h1>
+                <p id="statusSubheading" class="text-gray-500 dark:text-gray-400 mb-8">Your secure environment is ready. Awaiting exam window.</p>
+
+                <div class="inline-block border-2 border-siemens rounded-lg p-6 mb-10 bg-gray-50 dark:bg-gray-900 shadow-inner">
+                    <div id="timerDisplay" class="text-6xl font-mono font-bold tracking-wider text-siemens">
+                        00:00:00
+                    </div>
+                    <div class="mt-2 text-sm uppercase tracking-widest text-gray-500 font-semibold">Hours : Minutes : Seconds</div>
+                </div>
+
+                <div id="actionArea" class="space-y-4 opacity-50 pointer-events-none transition-opacity duration-500">
+                    <h3 class="text-lg font-semibold text-left border-b pb-2 mb-4 dark:border-gray-700">Assessment Modules</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="problem1.html" target="_blank" class="group block p-5 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-siemens dark:hover:border-siemens hover:shadow-md transition text-left">
+                            <h4 class="font-bold text-lg group-hover:text-siemens transition">Module 1: Infrastructure</h4>
+                            <p class="text-sm text-gray-500 mt-2">Nvidia-grade AI orchestration.</p>
+                        </a>
+                        <a href="problem2.html" target="_blank" class="group block p-5 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-siemens dark:hover:border-siemens hover:shadow-md transition text-left">
+                            <h4 class="font-bold text-lg group-hover:text-siemens transition">Module 2: Data Pipeline</h4>
+                            <p class="text-sm text-gray-500 mt-2">Google-grade distributed load test.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button onclick="launchProctorConsole()" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-teal-400 border border-teal-700/60 px-3 py-1.5 rounded text-xs font-mono transition">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Launch Proctor Session
+        </button>
+    </main>
+
+    <script>
+        // Theme Toggle Logic
+        const html = document.documentElement;
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', () => html.classList.toggle('dark'));
+
+        // Timer Logic
+        function updateTimer() {
+            const now = new Date();
+            // Convert current local time to IST (UTC+5:30)
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const istTime = new Date(utc + (3600000 * 5.5));
+
+            // Define 12:00 PM IST today
+            const startTime = new Date(istTime);
+            startTime.setHours(12, 0, 0, 0);
+
+            // Define 12:00 AM IST (Midnight, 12 hours later)
+            const endTime = new Date(startTime.getTime() + (12 * 60 * 60 * 1000));
+
+            const heading = document.getElementById('statusHeading');
+            const subheading = document.getElementById('statusSubheading');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const actionArea = document.getElementById('actionArea');
+
+            let diff;
+
+            if (istTime < startTime) {
+                // Assessment hasn't started
+                diff = startTime - istTime;
+                heading.innerText = "Assessment Starts In";
+                subheading.innerText = "Please wait. Modules will unlock at 12:00 PM IST.";
+                actionArea.classList.add('opacity-50', 'pointer-events-none');
+            } else if (istTime >= startTime && istTime <= endTime) {
+                // Assessment is live
+                diff = endTime - istTime;
+                heading.innerText = "Assessment In Progress";
+                heading.classList.add('text-red-600', 'dark:text-red-400');
+                subheading.innerText = "Finish and submit within the time limit.";
+                actionArea.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                // Assessment over
+                heading.innerText = "Assessment Window Closed";
+                subheading.innerText = "The 12-hour submission window has ended.";
+                timerDisplay.innerText = "00:00:00";
+                actionArea.classList.add('opacity-50', 'pointer-events-none');
+                return;
+            }
+
+            // Calculate H:M:S
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            timerDisplay.innerText =
+                String(h).padStart(2, '0') + ':' +
+                String(m).padStart(2, '0') + ':' +
+                String(s).padStart(2, '0');
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        function launchProctorConsole() {
+    const width = 360;
+    const height = 280;
+
+    // Position the popup directly at the top-right corner of the user's display
+    const left = window.screen.availWidth - width - 16;
+    const top = 16;
+
+    const windowFeatures = `
+        width=${width},
+        height=${height},
+        left=${left},
+        top=${top},
+        resizable=no,
+        scrollbars=no,
+        status=no,
+        toolbar=no,
+        menubar=no,
+        location=no
+    `.replace(/\s+/g, '');
+
+    const proctorWin = window.open('proctor.html', 'ProctorConsole', windowFeatures);
+
+    if (proctorWin) {
+        proctorWin.focus();
+        } else {
+            alert('Please allow popups for seimens.techin to launch the proctoring stream.');
+        }
+    }
+    </script>
+</body>
+</html>
