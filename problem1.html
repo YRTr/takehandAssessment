@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 1: Distributed Inference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 p-8 font-sans">
+    <div class="max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-xl border border-gray-700">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-600 pb-4">
+            <h1 class="text-3xl font-bold text-teal-400">Nvidia Architecture Challenge</h1>
+            <span class="bg-red-900/50 text-red-400 px-3 py-1 rounded text-sm font-mono border border-red-700">Confidential</span>
+        </div>
+
+        <h2 class="text-xl font-semibold mb-2">Problem Statement: Real-time AI Inference Dashboard & Worker</h2>
+        <p class="text-gray-300 mb-4 leading-relaxed">
+            You must architect a decoupled full-stack application that simulates a high-throughput AI text-to-video generation pipeline. The system must not lock up the client during processing.
+        </p>
+
+        <h3 class="text-lg font-bold text-teal-300 mt-6 mb-2">Technical Requirements:</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-300">
+            <li><strong>Frontend (React/MERN):</strong> A dashboard where users submit a text prompt. The UI must show real-time status updates (Queued -> Processing -> Completed) without manual page reloads.</li>
+            <li><strong>Backend (Node.js/Express):</strong> Accepts the prompt, authenticates the user, and pushes the job to a message queue.</li>
+            <li><strong>Cloud (AWS):</strong> Utilize AWS SQS to queue the prompts. Use AWS S3 to store the final generated output (simulate a mock video file or JSON payload upload).</li>
+            <li><strong>Worker Node (Python):</strong> Write a standalone Python daemon that continuously polls the AWS SQS queue. Upon receiving a message, simulate a 10-second processing delay (mocking the AI workflow), generate a dummy file, upload it to S3, and update a MongoDB database with the finished status.</li>
+        </ul>
+
+        <div class="mt-8 bg-gray-900 p-4 rounded border-l-4 border-teal-500">
+            <h4 class="font-bold text-teal-400 mb-1">Hints & Guidelines</h4>
+            <ul class="text-sm text-gray-400 list-disc pl-4">
+                <li>Focus heavily on the Python `boto3` library for SQS polling and S3 uploads.</li>
+                <li>Ensure environment variables (`.env`) are used strictly across both Node and Python environments. Never hardcode AWS keys.</li>
+                <li>Consider how the React frontend knows the Python worker finished. WebSockets (Socket.io) attached to MongoDB change streams or short-polling are acceptable.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
