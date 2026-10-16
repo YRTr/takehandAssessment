@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 2: Scalable Automations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 p-8 font-sans">
+    <div class="max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-xl border border-gray-700">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-600 pb-4">
+            <h1 class="text-3xl font-bold text-teal-400">Google Scale Challenge</h1>
+            <span class="bg-red-900/50 text-red-400 px-3 py-1 rounded text-sm font-mono border border-red-700">Confidential</span>
+        </div>
+
+        <h2 class="text-xl font-semibold mb-2">Problem Statement: Self-Healing Automation Orchestrator</h2>
+        <p class="text-gray-300 mb-4 leading-relaxed">
+            Current third-party automation tools (like Make.com) have strict rate limits and isolated workflows. You are tasked with building a custom, self-hosted API gateway that acts as a centralized automation hub.
+        </p>
+
+        <h3 class="text-lg font-bold text-teal-300 mt-6 mb-2">Technical Requirements:</h3>
+        <ul class="list-disc pl-5 space-y-2 text-gray-300">
+            <li><strong>MERN Stack:</strong> Build a React interface that allows a user to define a "Trigger" and an "Action". Store these workflow configurations in MongoDB.</li>
+            <li><strong>Python Scripting:</strong> Write a Python service that securely connects via `ftplib` to fetch remote assets, and utilizes `smtplib` to trigger notifications. The Python scripts must run dynamically based on the configuration stored in MongoDB.</li>
+            <li><strong>AI Workflow Integration:</strong> The Node.js backend must intercept incoming payloads, route the text data through a lightweight local AI summarization endpoint (or a simulated mock), and pass the transformed data to the Python worker.</li>
+            <li><strong>AWS:</strong> Deploy the Node.js API to AWS EC2 or Elastic Beanstalk. Ensure the environment is strictly locked down via Security Groups.</li>
+        </ul>
+
+        <div class="mt-8 bg-gray-900 p-4 rounded border-l-4 border-teal-500">
+            <h4 class="font-bold text-teal-400 mb-1">Hints & Guidelines</h4>
+            <ul class="text-sm text-gray-400 list-disc pl-4">
+                <li>Design the MongoDB schema to handle polymorphic actions (e.g., distinguishing between an FTP task and an SMTP task).</li>
+                <li>Ensure the Python worker can gracefully handle API failures. Implement a retry mechanism with exponential backoff.</li>
+                <li>Your submission will be evaluated on security, architectural cleanliness, and proper separation of concerns between Node.js logic and Python execution.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
